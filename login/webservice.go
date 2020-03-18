@@ -3,10 +3,11 @@ package login
 import (
 	"encoding/xml"
 	"log"
-	"sii/sii/config"
-	"sii/sii/dsig"
-	"sii/sii/soap"
 	"strings"
+
+	"github.com/jparedesimx/sii/config"
+	"github.com/jparedesimx/sii/dsig"
+	"github.com/jparedesimx/sii/soap"
 
 	"github.com/antchfx/xmlquery"
 )

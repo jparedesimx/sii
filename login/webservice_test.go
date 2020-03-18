@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"testing"
 
-	"sii/sii/model"
+	"github.com/jparedesimx/sii/model"
 )
 
 func TestAuthWebService(t *testing.T) {
