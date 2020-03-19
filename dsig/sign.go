@@ -23,6 +23,7 @@ func Sign(certBase64 string, password string, xmlData string) ([]byte, error) {
 	err = ioutil.WriteFile("file.xml", []byte(xmlData), 0644)
 	// Generate signed file
 	cmd := fmt.Sprintf("xmlsec1 --sign --output file_signed.xml --pkcs12 cert.pfx --pwd %s file.xml", password)
+	log.Println(cmd)
 	_, err = exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 		log.Println("Error in xmlsec1 command. ", err.Error())
