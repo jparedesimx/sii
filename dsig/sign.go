@@ -23,9 +23,7 @@ func Sign(certBase64 string, password string, xmlData string) ([]byte, error) {
 		log.Println("TempDir error", err.Error())
 	}
 	pfxFile := filepath.Join(tmpFolder, "cert.pfx")
-	log.Println(pfxFile)
 	xmlFile := filepath.Join(tmpFolder, "file.xml")
-	log.Println(xmlFile)
 	signedFile := filepath.Join(tmpFolder, "file_signed.xml")
 	// Save certificate to disk
 	err = ioutil.WriteFile(pfxFile, pfxData, 0755)
@@ -39,7 +37,6 @@ func Sign(certBase64 string, password string, xmlData string) ([]byte, error) {
 	}
 	// Generate signed file
 	cmd := fmt.Sprintf("xmlsec1 --sign --output %s --pkcs12 %s --pwd %s %s", signedFile, pfxFile, password, xmlFile)
-	log.Println(cmd)
 	_, err = exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 		log.Println("Error in xmlsec1 command. ", err.Error())
