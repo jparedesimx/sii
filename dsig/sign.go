@@ -51,5 +51,7 @@ func Sign(certBase64 string, password string, xmlData string) ([]byte, error) {
 	os.Remove(pfxFile)
 	os.Remove(xmlFile)
 	os.Remove(signedFile)
+	log.Println(tmpFolder)
+	os.Remove(tmpFolder)
 	return fileSigned, nil
 }
