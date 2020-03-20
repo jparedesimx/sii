@@ -18,10 +18,10 @@ func Sign(certBase64 string, password string, xmlData string) ([]byte, error) {
 		return nil, err
 	}
 	// Save certificate to disk
-	err = ioutil.WriteFile("cert.pfx", pfxData, 0777)
+	err = ioutil.WriteFile("cert.pfx", pfxData, 0666)
 	log.Println("cert.pfx", err.Error())
 	// Save xml to disk
-	err = ioutil.WriteFile("file.xml", []byte(xmlData), 077)
+	err = ioutil.WriteFile("file.xml", []byte(xmlData), 0666)
 	log.Println("file.xml", err.Error())
 	// Generate signed file
 	cmd := fmt.Sprintf("xmlsec1 --sign --output file_signed.xml --pkcs12 cert.pfx --pwd %s file.xml", password)
