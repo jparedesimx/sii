@@ -45,7 +45,7 @@ func Sign(certBase64 string, password string, xmlData string) ([]byte, error) {
 		log.Println("Error in xmlsec1 command. ", err.Error())
 		return nil, err
 	}
-	fileSigned, err := ioutil.ReadFile("file_signed.xml")
+	fileSigned, err := ioutil.ReadFile(signedFile)
 	if err != nil {
 		log.Println("Error reading file_signed.xml. ", err.Error())
 		return nil, err
