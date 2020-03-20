@@ -18,16 +18,18 @@ func Sign(certBase64 string, password string, xmlData string) ([]byte, error) {
 		log.Println("Error decoding certificate. ", err.Error())
 		return nil, err
 	}
-	tmpFolder, err := ioutil.TempDir("", "dsig")
+	tmpFolder, err := ioutil.TempDir("", "tmp")
 	if err != nil {
 		log.Println("TempDir error", err.Error())
 	}
 	pfxFile := filepath.Join(tmpFolder, "cert.pfx")
+	log.Println(pfxFile)
 	xmlFile := filepath.Join(tmpFolder, "file.xml")
+	log.Println(xmlFile)
 	signedFile := filepath.Join(tmpFolder, "file_signed.xml")
 	// Save certificate to disk
 	err = ioutil.WriteFile(pfxFile, pfxData, 0755)
-	log.Println(pfxFile, err.Error())
+	log.Println("cert.pfx", err.Error())
 	// Save xml to disk
 	err = ioutil.WriteFile(xmlFile, []byte(xmlData), 0755)
 	log.Println("file.xml", err.Error())
