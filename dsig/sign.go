@@ -27,7 +27,7 @@ func Sign(certBase64 string, password string, xmlData string) ([]byte, error) {
 	signedFile := filepath.Join(tmpFolder, "file_signed.xml")
 	// Save certificate to disk
 	err = ioutil.WriteFile(pfxFile, pfxData, 0755)
-	log.Println("cert.pfx", err.Error())
+	log.Println(pfxFile, err.Error())
 	// Save xml to disk
 	err = ioutil.WriteFile(xmlFile, []byte(xmlData), 0755)
 	log.Println("file.xml", err.Error())
