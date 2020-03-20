@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
 // Sign xml files using xmlsec1 library
@@ -17,11 +18,17 @@ func Sign(certBase64 string, password string, xmlData string) ([]byte, error) {
 		log.Println("Error decoding certificate. ", err.Error())
 		return nil, err
 	}
+	tmpFolder, err := ioutil.TempDir("", "dsig")
+	if err != nil {
+		log.Println("TempDir error", err.Error())
+	}
+	pfxFile := filepath.Join(tmpFolder, "cert.pfx")
+	xmlFile := filepath.Join(tmpFolder, "file.xml")
 	// Save certificate to disk
-	err = ioutil.WriteFile("cert.pfx", pfxData, 0755)
+	err = ioutil.WriteFile(pfxFile, pfxData, 0755)
 	log.Println("cert.pfx", err.Error())
 	// Save xml to disk
-	err = ioutil.WriteFile("file.xml", []byte(xmlData), 0755)
+	err = ioutil.WriteFile(xmlFile, []byte(xmlData), 0755)
 	log.Println("file.xml", err.Error())
 	// Generate signed file
 	cmd := fmt.Sprintf("xmlsec1 --sign --output file_signed.xml --pkcs12 cert.pfx --pwd %s file.xml", password)
@@ -37,8 +44,8 @@ func Sign(certBase64 string, password string, xmlData string) ([]byte, error) {
 		return nil, err
 	}
 	// Remove temporary files
-	os.Remove("cert.pfx")
-	os.Remove("file.xml")
-	os.Remove("file_signed.xml")
+	os.Remove(pfxFile)
+	os.Remove(xmlFile)
+	os.Remove(signedFile)
 	return fileSigned, nil
 }
