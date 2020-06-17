@@ -39,7 +39,7 @@ func Request(url string, body []byte) ([]byte, error) {
 		return nil, err
 	}
 	defer res.Body.Close()
-	log.Println("-> Retrieving and parsing the response")
+	// log.Println("-> Retrieving and parsing the response")
 	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		log.Println("Error reading response. ", err.Error())

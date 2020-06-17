@@ -51,7 +51,7 @@ func AuthWebService(certBase64 string, password string) (string, error) {
 			break
 		}
 	}
-	log.Println("Tries: ", retries)
+	// log.Println("Tries: ", retries)
 	// Parse response to xml struct
 	var seed seed
 	err = xml.Unmarshal([]byte(string(response)), &seed)
@@ -65,7 +65,7 @@ func AuthWebService(certBase64 string, password string) (string, error) {
 		return "", err
 	}
 	seedNode := xmlquery.FindOne(responseNode, "//SEMILLA")
-	log.Println("SEMILLA:", seedNode.InnerText())
+	//log.Println("SEMILLA:", seedNode.InnerText())
 	pszXML := strings.Replace(config.PszXML, "@seed", seedNode.InnerText(), 1)
 	// Sign pszXML and return the generated file like a byte array
 	pszSigned, err := dsig.Sign(certBase64, password, pszXML)
@@ -86,7 +86,7 @@ func AuthWebService(certBase64 string, password string) (string, error) {
 			break
 		}
 	}
-	log.Println("Tries: ", retries)
+	// log.Println("Tries: ", retries)
 	// Parse response to xml struct
 	var token token
 	err = xml.Unmarshal([]byte(string(response)), &token)
@@ -100,6 +100,6 @@ func AuthWebService(certBase64 string, password string) (string, error) {
 		return "", err
 	}
 	tokenNode := xmlquery.FindOne(responseNode, "//TOKEN")
-	log.Println("TOKEN:", tokenNode.InnerText())
+	// log.Println("TOKEN:", tokenNode.InnerText())
 	return tokenNode.InnerText(), nil
 }
