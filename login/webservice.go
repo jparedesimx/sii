@@ -2,6 +2,7 @@ package login
 
 import (
 	"encoding/xml"
+	"errors"
 	"log"
 	"strings"
 
@@ -39,9 +40,12 @@ var err error
 // AuthWebService implements SII authentication using soap webservices
 func AuthWebService(certBase64 string, password string) (string, error) {
 	body := []byte(strings.TrimSpace(config.SeedTemplate))
-	retries := 100
+	retries := 10
 	for retries > 0 {
 		response, err = soap.Request(config.SeedWsdl, body)
+		if strings.Contains(string(response), "503 Service") {
+			err = errors.New("503 Service Unavailable")
+		}
 		if err != nil {
 			retries--
 			if retries == 0 {
@@ -51,7 +55,7 @@ func AuthWebService(certBase64 string, password string) (string, error) {
 			break
 		}
 	}
-	// log.Println("Tries: ", retries)
+	// log.Println("Seed Tries: ", retries)
 	// Parse response to xml struct
 	var seed seed
 	err = xml.Unmarshal([]byte(string(response)), &seed)
@@ -65,7 +69,7 @@ func AuthWebService(certBase64 string, password string) (string, error) {
 		return "", err
 	}
 	seedNode := xmlquery.FindOne(responseNode, "//SEMILLA")
-	//log.Println("SEMILLA:", seedNode.InnerText())
+	// log.Println("SEMILLA:", seedNode.InnerText())
 	pszXML := strings.Replace(config.PszXML, "@seed", seedNode.InnerText(), 1)
 	// Sign pszXML and return the generated file like a byte array
 	pszSigned, err := dsig.Sign(certBase64, password, pszXML)
@@ -74,9 +78,12 @@ func AuthWebService(certBase64 string, password string) (string, error) {
 	}
 	pszXML = strings.Replace(config.TokenTemplate, "@pszXML", string(pszSigned), 1)
 	body = []byte(strings.TrimSpace(pszXML))
-	retries = 100
+	retries = 10
 	for retries > 0 {
 		response, err = soap.Request(config.TokenWsdl, body)
+		if strings.Contains(string(response), "503 Service") {
+			err = errors.New("503 Service Unavailable")
+		}
 		if err != nil {
 			retries--
 			if retries == 0 {
@@ -86,7 +93,7 @@ func AuthWebService(certBase64 string, password string) (string, error) {
 			break
 		}
 	}
-	// log.Println("Tries: ", retries)
+	// log.Println("Token Tries: ", retries)
 	// Parse response to xml struct
 	var token token
 	err = xml.Unmarshal([]byte(string(response)), &token)
