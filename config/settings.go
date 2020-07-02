@@ -2,7 +2,8 @@ package config
 
 //Constants
 const (
-	SeedWsdl     = "https://palena.sii.cl/DTEWS/CrSeed.jws?WSDL"
+	CertSeedWdsl = "https://maullin.sii.cl/DTEWS/CrSeed.jws?WSDL"
+	ProdSeedWdsl = "https://palena.sii.cl/DTEWS/CrSeed.jws?WSDL"
 	SeedTemplate = `
 	<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:def="http://DefaultNamespace">
 		<soapenv:Header/>
@@ -10,7 +11,8 @@ const (
 			<def:getSeed soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 		</soapenv:Body>
 	</soapenv:Envelope>`
-	TokenWsdl     = "https://palena.sii.cl/DTEWS/GetTokenFromSeed.jws?WSDL"
+	CertTokenWsdl = "https://maullin.sii.cl/DTEWS/GetTokenFromSeed.jws?WSDL"
+	ProdTokenWsdl = "https://maullin.sii.cl/DTEWS/GetTokenFromSeed.jws?WSDL"
 	TokenTemplate = `
 	<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:def="http://DefaultNamespace">
 		<soapenv:Header/>

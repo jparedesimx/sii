@@ -38,12 +38,16 @@ var response []byte
 var err error
 
 // AuthWebService implements SII authentication using soap webservices
-func AuthWebService(certBase64 string, password string) (string, error) {
+func AuthWebService(certBase64 string, password string, env string) (string, error) {
 	body := []byte(strings.TrimSpace(config.SeedTemplate))
 	retries := 10
 	for retries > 0 {
-		response, err = soap.Request(config.SeedWsdl, body)
-		if strings.Contains(string(response), "503 Service") {
+		seedURL := config.CertSeedWdsl
+		if env == "production" {
+			seedURL = config.ProdSeedWdsl
+		}
+		response, err = soap.Request(seedURL, body)
+		if strings.Contains(string(response), "503") {
 			err = errors.New("503 Service Unavailable")
 		}
 		if err != nil {
@@ -80,8 +84,12 @@ func AuthWebService(certBase64 string, password string) (string, error) {
 	body = []byte(strings.TrimSpace(pszXML))
 	retries = 10
 	for retries > 0 {
-		response, err = soap.Request(config.TokenWsdl, body)
-		if strings.Contains(string(response), "503 Service") {
+		tokenURL := config.CertTokenWsdl
+		if env == "production" {
+			tokenURL = config.ProdTokenWsdl
+		}
+		response, err = soap.Request(tokenURL, body)
+		if strings.Contains(string(response), "503") {
 			err = errors.New("503 Service Unavailable")
 		}
 		if err != nil {
